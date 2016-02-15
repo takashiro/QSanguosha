@@ -29,6 +29,7 @@
 class Card;
 class CardArea;
 class GameRule;
+class GameMode;
 class ServerPlayer;
 class Package;
 
@@ -102,6 +103,8 @@ public:
 protected:
     CAbstractPlayer *createPlayer(CServerUser *user);
     CAbstractPlayer *createPlayer(CServerRobot *robot);
+
+    void loadMode(const GameMode *mode);
 
     void prepareToStart();
     CardArea *findArea(const CardsMoveStruct::Area &area);
