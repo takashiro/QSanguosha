@@ -104,8 +104,7 @@ public:
     QMap<uint, QList<const General *> > broadcastRequestForGenerals(const QList<ServerPlayer *> &players, int num, int limit);
 
 protected:
-    CAbstractPlayer *createPlayer(CServerUser *user);
-    CAbstractPlayer *createPlayer(CServerRobot *robot);
+    CAbstractPlayer *createPlayer(CServerAgent *agent) override;
 
     void loadMode(const GameMode *mode);
 
