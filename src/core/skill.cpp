@@ -182,6 +182,19 @@ bool ViewAsSkill::isAvailable(const Player *self, const QString &pattern) const
     return pattern.isEmpty();
 }
 
+bool ViewAsSkill::isValid(const QList<Card *> &cards, const Player *self, const QString &pattern) const
+{
+    QList<const Card *> selected;
+    foreach (const Card *toSelect, cards) {
+        if (viewFilter(selected, toSelect, self, pattern))
+            selected << toSelect;
+        else
+            return false;
+    }
+
+    return true;
+}
+
 OneCardViewAsSkill::OneCardViewAsSkill(const QString &name)
     : ViewAsSkill(name)
 {
@@ -251,7 +264,19 @@ bool ProactiveSkill::cardFilter(const QList<const Card *> &selected, const Card 
     return false;
 }
 
-bool ProactiveSkill::playerFeasible(const QList<const Player *> &selected, const Player *source) const
+bool ProactiveSkill::isValid(const QList<Card *> &cards, const Player *source, const QString &pattern) const
+{
+    QList<const Card *> selected;
+    foreach (const Card *toSelect, cards) {
+        if (cardFilter(selected, toSelect, source, pattern))
+            selected << toSelect;
+        else
+            return false;
+    }
+    return cardFeasible(selected, source);
+}
+
+bool ProactiveSkill::playerFeasible(const QList<const Player *> &, const Player *) const
 {
     C_UNUSED(selected);
     C_UNUSED(source);
@@ -264,6 +289,37 @@ bool ProactiveSkill::playerFilter(const QList<const Player *> &selected, const P
     C_UNUSED(toSelect);
     C_UNUSED(source);
     return false;
+}
+
+bool ProactiveSkill::isValid(const QList<ServerPlayer *> &targets, ServerPlayer *source) const
+{
+    QList<const Player *> selected;
+    foreach (ServerPlayer *target, targets)
+        selected << target;
+    return isValid(selected, source);
+}
+
+bool ProactiveSkill::isValid(const QList<const Player *> &targets, const Player *source) const
+{
+    QList<const Player *> selected;
+    foreach (const Player *toSelect, targets) {
+        if (playerFilter(selected, toSelect, source))
+            selected << toSelect;
+        else
+            return false;
+    }
+
+    return playerFeasible(targets, source);
+}
+
+bool ProactiveSkill::cost(GameLogic *, ServerPlayer *, const QList<ServerPlayer *> &, const QList<Card *> &) const
+{
+    return false;
+}
+
+void ProactiveSkill::effect(GameLogic *, ServerPlayer *, const QList<ServerPlayer *> &, const QList<Card *> &) const
+{
+
 }
 
 bool ProactiveSkill::viewFilter(const QList<const Card *> &selected, const Card *card, const Player *source, const QString &pattern) const

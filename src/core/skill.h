@@ -145,6 +145,9 @@ public:
 
     //Returns the generated new card
     virtual Card *viewAs(const QList<Card *> &cards, const Player *self) const = 0;
+
+    //Check if selected cards are valid
+    bool isValid(const QList<Card *> &cards, const Player *self, const QString &pattern) const;
 };
 
 class OneCardViewAsSkill : public ViewAsSkill
@@ -173,13 +176,21 @@ public:
     //Check if the card can be selected
     virtual bool cardFilter(const QList<const Card *> &selected, const Card *card, const Player *source, const QString &pattern) const;
 
+    //Check if selected cards are valid
+    bool isValid(const QList<Card *> &cards, const Player *source, const QString &pattern) const;
+
     //Check if the target players are feasible
     virtual bool playerFeasible(const QList<const Player *> &selected, const Player *source) const;
 
     //Check if a player can be selected
     virtual bool playerFilter(const QList<const Player *> &selected, const Player *toSelect, const Player *source) const;
 
-    virtual void effect(GameLogic *logic, ServerPlayer *from, const QList<ServerPlayer *> &to, const QList<Card *> &cards) const = 0;
+    //Check if selected players are valid
+    bool isValid(const QList<ServerPlayer *> &targets, ServerPlayer *source) const;
+    bool isValid(const QList<const Player *> &targets, const Player *source) const;
+
+    virtual bool cost(GameLogic *logic, ServerPlayer *from, const QList<ServerPlayer *> &to, const QList<Card *> &cards) const;
+    virtual void effect(GameLogic *logic, ServerPlayer *from, const QList<ServerPlayer *> &to, const QList<Card *> &cards) const;
 
     bool viewFilter(const QList<const Card *> &selected, const Card *card, const Player *source, const QString &pattern) const final override;
     Card *viewAs(const QList<Card *> &cards, const Player *source) const final override;
