@@ -276,7 +276,7 @@ bool ProactiveSkill::isValid(const QList<Card *> &cards, const Player *source, c
     return cardFeasible(selected, source);
 }
 
-bool ProactiveSkill::playerFeasible(const QList<const Player *> &, const Player *) const
+bool ProactiveSkill::playerFeasible(const QList<const Player *> &selected, const Player *source) const
 {
     C_UNUSED(selected);
     C_UNUSED(source);

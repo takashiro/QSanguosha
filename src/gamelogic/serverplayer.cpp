@@ -529,7 +529,6 @@ bool ServerPlayer::askToUseCard(const QString &pattern, const QList<ServerPlayer
     if (card == nullptr)
         return false;
 
-    CardUseStruct use;
     use.from = this;
     use.card = card;
     use.to = targets;
@@ -542,38 +541,6 @@ bool ServerPlayer::askToUseCard(const QString &pattern, const QList<ServerPlayer
         return false;
 
     return m_logic->useCard(use);
-}
-
-SkillInvokeStruct ServerPlayer::askToInvokeSkill(const Skill *skill)
-{
-    QVariantMap data;
-    data["pattern"] = "@" + skill->name();
-    int timeout = m_logic->settings()->timeout * 1000;
-    m_agent->request(S_COMMAND_ACT, data, timeout);
-    const QVariantMap reply = m_agent->waitForReply(timeout).toMap();
-    SkillInvokeStruct invoke;
-    if (reply.isEmpty())
-        return invoke;
-    
-    QList<ServerPlayer *> targets;
-    QVariantList tos = reply["to"].toList();
-    foreach (const QVariant &to, tos) {
-        uint toId = to.toUInt();
-        ServerPlayer *target = m_logic->findPlayer(toId);
-        if (target)
-            targets << target;
-    }
-
-    QList<Card *> cards = m_logic->findCards(reply["cards"]);
-
-    if (skill->subtype() == ViewAsSkill::ProactiveType) {
-        invoke.skill = skill;
-        invoke.player = this;
-        invoke.targets = targets;
-        invoke.cards = cards;
-    }
-
-    return invoke;
 }
 
 QList<QList<Card *>> ServerPlayer::askToArrangeCard(const QList<Card *> &cards, const QList<int> &capacities, const QStringList &areaNames)

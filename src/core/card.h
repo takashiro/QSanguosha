@@ -148,6 +148,8 @@ public:
     static Card *Find(const QList<Card *> &cards, uint id);
     static QList<Card *> Find(const QList<Card *> &cards, const QVariant &data);
 
+    QVariantMap toVariant() const;
+
 protected:
     uint m_id;
     Suit m_suit;

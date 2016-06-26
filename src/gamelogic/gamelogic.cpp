@@ -755,7 +755,8 @@ void GameLogic::loadMode(const GameMode *mode)
     foreach (const EventHandler *rule, rules)
         addEventHandler(rule);
 
-    setPackages(Sanguosha.getPackages(mode));
+    Engine *engine = Engine::instance();
+    setPackages(engine->getPackages(mode));
 }
 
 const RoomSettings *GameLogic::settings() const
@@ -768,7 +769,8 @@ void GameLogic::prepareToStart()
     CRoom *room = this->room();
 
     //Load game mode
-    const GameMode *mode = Sanguosha.mode(settings()->mode);
+    Engine *engine = Engine::instance();
+    const GameMode *mode = engine->mode(settings()->mode);
     loadMode(mode);
 
     //Arrange seats for all the players
@@ -787,7 +789,7 @@ void GameLogic::prepareToStart()
     foreach (ServerPlayer *player, players) {
         CServerAgent *agent = findAgent(player);
         QVariantMap info;
-        if (agent->controlledByClient()) {
+        if (agent->isHuman()) {
             info["userId"] = agent->id();
         } else {
             info["robotId"] = agent->id();
