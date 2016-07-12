@@ -201,6 +201,10 @@ bool ServerPlayer::activate()
                 if (!proactiveSkill->isValid(targets, this) || !proactiveSkill->isValid(cards, this, QString()))
                     return false;
 
+                if (proactiveSkill->cost(m_logic, this, targets, cards)) {
+                    proactiveSkill->effect(m_logic, this, targets, cards);
+                }
+
                 addSkillHistory(skill, cards, targets);
                 return false;
             } else if (skill->subtype() == ViewAsSkill::ConvertType) {

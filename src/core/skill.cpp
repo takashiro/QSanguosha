@@ -314,7 +314,7 @@ bool ProactiveSkill::isValid(const QList<const Player *> &targets, const Player 
 
 bool ProactiveSkill::cost(GameLogic *, ServerPlayer *, const QList<ServerPlayer *> &, const QList<Card *> &) const
 {
-    return false;
+    return true;
 }
 
 void ProactiveSkill::effect(GameLogic *, ServerPlayer *, const QList<ServerPlayer *> &, const QList<Card *> &) const
