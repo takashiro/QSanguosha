@@ -163,9 +163,14 @@ public:
         return selected.isEmpty();
     }
 
-    void effect(GameLogic *logic, ServerPlayer *from, const QList<ServerPlayer *> &, const QList<Card *> &) const override
+    bool cost(GameLogic *logic, ServerPlayer *from, const QList<ServerPlayer *> &, const QList<Card *> &) const override
     {
         logic->loseHp(from, 1);
+        return true;
+    }
+
+    void effect(GameLogic *, ServerPlayer *from, const QList<ServerPlayer *> &, const QList<Card *> &) const override
+    {
         from->drawCards(2);
     }
 };
@@ -496,7 +501,7 @@ public:
         return selected.length() == 1;
     }
 
-    void effect(GameLogic *logic, ServerPlayer *from, const QList<ServerPlayer *> &to, const QList<Card *> &cards) const override
+    bool cost(GameLogic *logic, ServerPlayer *, const QList<ServerPlayer *> &, const QList<Card *> &cards) const override
     {
         CardsMoveStruct discard;
         discard.cards = cards;
@@ -504,6 +509,11 @@ public:
         discard.isOpen = true;
         logic->moveCards(discard);
 
+        return true;
+    }
+
+    void effect(GameLogic *logic, ServerPlayer *from, const QList<ServerPlayer *> &to, const QList<Card *> &) const override
+    {
         QList<ServerPlayer *> targets;
         targets << from << to;
         logic->sortByActionOrder(targets);

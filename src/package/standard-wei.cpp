@@ -137,14 +137,17 @@ public:
         return selected.length() == 1;
     }
 
-    void effect(GameLogic *logic, ServerPlayer *from, const QList<ServerPlayer *> &, const QList<Card *> &cards) const override
+    bool cost(GameLogic *logic, ServerPlayer *from, const QList<ServerPlayer *> &, const QList<Card *> &cards) const override
     {
         Card *card = cards.first();
         CardResponseStruct response;
         response.card = card;
         response.from = from;
-        logic->respondCard(response);
+        return logic->respondCard(response);
+    }
 
+    void effect(GameLogic *, ServerPlayer *from, const QList<ServerPlayer *> &, const QList<Card *> &cards) const override
+    {
         from->tag["guicai_card"] = cards.first()->id();
     }
 };

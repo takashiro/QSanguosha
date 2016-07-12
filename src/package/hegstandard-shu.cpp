@@ -82,17 +82,21 @@ public:
         return targets.length() == 1;
     }
 
-    void effect(GameLogic *logic, ServerPlayer *from, const QList<ServerPlayer *> &to, const QList<Card *> &cards) const override
+    bool cost(GameLogic *logic, ServerPlayer *, const QList<ServerPlayer *> &to, const QList<Card *> &cards) const override
     {
         if (to.isEmpty() || cards.isEmpty())
-            return;
+            return false;
 
         CardsMoveStruct move;
         move.cards = cards;
         move.to.owner = to.first();
         move.to.type = CardArea::Hand;
         logic->moveCards(move);
+        return true;
+    }
 
+    void effect(GameLogic *logic, ServerPlayer *from, const QList<ServerPlayer *> &, const QList<Card *> &cards) const override
+    {
         int oldValue = from->tag["rende_count"].toInt();
         int newValue = oldValue + cards.length();
         from->tag["rende_count"] = newValue;

@@ -61,7 +61,7 @@ public:
         return selected.length() == 1;
     }
 
-    void effect(GameLogic *logic, ServerPlayer *from, const QList<ServerPlayer *> &to, const QList<Card *> &cards) const override
+    bool cost(GameLogic *logic, ServerPlayer *, const QList<ServerPlayer *> &, const QList<Card *> &cards) const override
     {
         CardsMoveStruct move;
         move.cards = cards;
@@ -69,6 +69,11 @@ public:
         move.isOpen = true;
         logic->moveCards(move);
 
+        return true;
+    }
+
+    void effect(GameLogic *logic, ServerPlayer *from, const QList<ServerPlayer *> &to, const QList<Card *> &) const override
+    {
         RecoverStruct recover;
         recover.from = from;
         recover.to = to.first();
@@ -201,7 +206,7 @@ public:
         return selected.length() == 2;
     }
 
-    void effect(GameLogic *logic, ServerPlayer *, const QList<ServerPlayer *> &to, const QList<Card *> &cards) const
+    bool cost(GameLogic *logic, ServerPlayer *, const QList<ServerPlayer *> &, const QList<Card *> &cards) const override
     {
         CardsMoveStruct move;
         move.cards = cards;
@@ -209,6 +214,11 @@ public:
         move.isOpen = true;
         logic->moveCards(move);
 
+        return true;
+    }
+
+    void effect(GameLogic *logic, ServerPlayer *, const QList<ServerPlayer *> &to, const QList<Card *> &) const override
+    {
         Duel *duel = new Duel(Card::NoSuit, 0);
         duel->setSkill(this);
 
