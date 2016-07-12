@@ -23,6 +23,7 @@
 
 #include <CRoom>
 #include <CServerUser>
+#include <CServerRobot>
 
 #include <QCoreApplication>
 
@@ -44,6 +45,10 @@ void PcConsoleStartDialog::start(const QString &screenName, const QString &avata
         server->deleteLater();
         return;
     }
+
+    connect(server, &Server::robotAdded, [](CServerRobot *robot){
+        robot->initAi("script/Ai/smart-ai.js");
+    });
 
     m_client->connectToHost(QHostAddress::LocalHost, port);
 }
