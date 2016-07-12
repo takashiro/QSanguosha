@@ -209,7 +209,7 @@ bool ServerPlayer::activate()
                 return false;
             } else if (skill->subtype() == ViewAsSkill::ConvertType) {
                 const ViewAsSkill *viewAsSkill = dynamic_cast<const ViewAsSkill *>(skill);
-                if (viewAsSkill == nullptr || viewAsSkill->isValid(cards, this, QString()))
+                if (viewAsSkill == nullptr || !viewAsSkill->isValid(cards, this, QString()))
                     return false;
 
                 card = viewAsSkill->viewAs(cards, this);
