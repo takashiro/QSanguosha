@@ -789,11 +789,7 @@ void GameLogic::prepareToStart()
     foreach (ServerPlayer *player, players) {
         CServerAgent *agent = findAgent(player);
         QVariantMap info;
-        if (agent->isHuman()) {
-            info["userId"] = agent->id();
-        } else {
-            info["robotId"] = agent->id();
-        }
+        info["agentId"] = agent->id();
         info["playerId"] = player->id();
         playerList << info;
     }

@@ -149,6 +149,9 @@ RoomScene {
                 target: roomScene
                 onDashboardModelChanged: {
                     var model = dashboardModel[0];
+                    if (!model)
+                        return;
+
                     dashboard.seatNumber = Qt.binding(function(){return model.seat});
                     dashboard.phase = Qt.binding(function(){return model.phase});
                     dashboard.hp = Qt.binding(function(){return model.hp});
